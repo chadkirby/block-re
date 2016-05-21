@@ -1,0 +1,11 @@
+{
+  "name": "block-re",
+  "version": "1.0.0",
+  "description": "block regular expression javascript template function",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Chad Kirby",
+  "license": "MIT"
+}
