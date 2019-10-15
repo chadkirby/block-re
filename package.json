@@ -7,5 +7,11 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Chad Kirby",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^6.0.0",
+    "eslint-plugin-turbopatent": "^4.0.0",
+    "tape": "^4.11.0",
+    "tom-jumbo-grumbo": "git+ssh://git@github.com/PatentNavigation/tom-jumbo-grumbo.git#v1.0.2"
+  }
 }

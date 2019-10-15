@@ -16,15 +16,9 @@
 // [ <span>hi%20there</span> ]
 
 function makeTagProcessor(tagFn, postProcessor) {
-  tagFn = tagFn || defaultConcatenateTaggedString;
-  return function (literals) {
-    var out = '';
-
-    for (var _len = arguments.length, cookedValues = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-      cookedValues[_key - 1] = arguments[_key];
-    }
-
-    for (var index = 0; index < literals.length; index++) {
+  return function(literals, ...cookedValues) {
+    let out = ``;
+    for (const index of literals.keys()) {
       out += tagFn(index, literals, cookedValues);
     }
     if (postProcessor) {
@@ -35,11 +29,11 @@ function makeTagProcessor(tagFn, postProcessor) {
 }
 
 function escapeForRegex(str) {
-  return str.toString().replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+  return str.toString().replace(/[-[\]/{}()*+?.\\^$|]/g, "\\$&");
 }
 
 function isNone(obj) {
-    return obj === null || obj === undefined;
+  return obj === null || obj === undefined;
 }
 
 // coffeescript block regular expressions are awesome http://coffeescript.org/#regexes
@@ -60,17 +54,12 @@ function blockRE(flags, options) {
     flags = '';
   }
   options = options || { escapeText: true };
-  return makeTagProcessor(function (index, literals, cookedValues) {
-    var cooked = cookedValues[index];
+  return makeTagProcessor(function(index, literals, cookedValues) {
+    let cooked = cookedValues[index];
     // replace white-space and comments in the raw string, allowing escaped '/' and whitespace
     // but also match the escaped escape /\\\\/, so it doesn't act like an escape!
-    var literal = literals.raw[index].replace(/(\\\\|\\\/|\\\s)|\s+(?:\/\/.*)?/g, '$1');
+    let literal = literals.raw[index].replace(/(\\\\|\\\/|\\\s)|\s+(?:\/\/.*)?/g, '$1');
     if (index === cookedValues.length) {
-      return literal;
-    }
-    if (isNone(cooked)) {
-      // this is a mistake; results will be unexpected
-      console.log('regex template substitution is null: ' + literals.join(''), cooked);
       return literal;
     }
     // this bit differs from/improves on the coffeescript block regex (which just substitutes
@@ -83,10 +72,10 @@ function blockRE(flags, options) {
       // then escape the substitution as a string
       cooked = escapeForRegex(cooked);
     }
-    return literal + cooked;
+    return `${literal}${cooked}`;
   },
   // postProcessor: after assembling the regex string, turn it into a RegExp
-  function (reString) {
+  function(reString) {
     return new RegExp(reString, flags || '');
   });
 }
