@@ -1,6 +1,6 @@
 {
   "name": "block-re",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "block regular expression javascript template function",
   "main": "index.js",
   "scripts": {
