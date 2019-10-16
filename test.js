@@ -87,10 +87,12 @@ test(`blockRE escapes string substitutions, not regex substitutions`, (assert) =
 
 test(`BLOCKRE accepts regex literal syntax`, (assert) => {
   assert.equal(RE`/x/g`.source, `x`);
+  assert.equal(RE`x`.source, `x`);
   assert.equal(RE`/
     y // match 'y'
   /g`.source, `y`);
   assert.equal(RE`/x/g`.flags, `g`);
+  assert.equal(RE`x`.flags, ``);
   assert.equal(RE`/x/suygim`.flags, `gimsuy`);
   assert.equal(RE`/ a ${'b'} ${/c/} /`.source, `abc`);
   assert.equal(RE`/ ${/[a]/} /`.source, `[a]`);
@@ -100,9 +102,19 @@ test(`BLOCKRE accepts regex literal syntax`, (assert) => {
     `don't escape text by default`
   );
   assert.equal(
-    RE`/ ${/[a]\d{1}/.source} /e`.source,
+    RE`/ ${/[a]\d{1}/.source} /E`.source,
     `\\[a\\]\\\\d\\{1\\}`,
-    `'e' flag opts in to escape text in substitutions`
+    `'E' flag opts in to escape text in substitutions`
+  );
+
+  assert.deepEqual(
+    RE`/
+      (?<${'first'}> . )
+      (${'?<second>'} . )
+      ${'(?<third>.)'}
+    /`.exec('abc').groups,
+    { first: `a`, second: `b`, third: `c` },
+    `named capture groups FTW`
   );
   assert.end();
 });

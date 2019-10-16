@@ -24,14 +24,15 @@ function blockRE(...args) {
     // make an unfrozen copy of the raw literals
     let raw = literals.raw.slice();
     let last = raw[raw.length - 1];
-    let trailing = last.match(/[/][gimsuye]*$/);
+    // check for trailing slash & supported flags (including our special 'E' flag)
+    let trailing = last.match(/[/][gimsuyE]*$/);
     if (raw[0].startsWith('/') && trailing) {
       // the tagged string has literal RegExp syntax
       // grab the flags (if any)
       flags = trailing[0].slice(1);
-      if (/e/.test(flags)) {
+      if (/E/.test(flags)) {
         escapeText = true;
-        flags = flags.replace(/e/g, '');
+        flags = flags.replace(/E/g, '');
       }
       // remove the trailing '/' & flags (if any)
       raw[raw.length - 1] = last.slice(0, -trailing[0].length);
