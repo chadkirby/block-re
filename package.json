@@ -1,5 +1,5 @@
 {
-  "name": "block-re",
+  "name": "@ckirby/block-re",
   "version": "1.1.1",
   "description": "block regular expression javascript template function",
   "main": "index.js",
@@ -13,5 +13,16 @@
     "eslint-plugin-turbopatent": "^4.0.0",
     "tape": "^4.11.0",
     "tom-jumbo-grumbo": "git+ssh://git@github.com/PatentNavigation/tom-jumbo-grumbo.git#v1.0.2"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chadkirby/block-re.git"
+  },
+  "keywords": [
+    "regex"
+  ],
+  "bugs": {
+    "url": "https://github.com/chadkirby/block-re/issues"
+  },
+  "homepage": "https://github.com/chadkirby/block-re#readme"
 }

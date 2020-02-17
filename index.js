@@ -1,15 +1,3 @@
-// coffeescript block regular expressions are awesome http://coffeescript.org/#regexes
-// > Similar to block strings… CoffeeScript supports block regexes — extended regular
-// > expressions that ignore internal whitespace and can contain comments and interpolation.
-// > Modeled after Perl's /x modifier… block regexes… go a long way towards making complex
-// > regular expressions readable.
-// I would like me some of that in ES6
-// unlike the other tag processors, blockRE is a function that takes options
-// and returns the tag processor fn.
-// so, blockRE()`( a )` gives you /(a)/
-// NB, in the chrome debugger, you have to assign the tag processor fn to a value before you can use it
-// re = blockRE('g'); re`( a )`;
-// gives you /a/g
 function blockRE(...args) {
   let escapeText;
   let flags;
