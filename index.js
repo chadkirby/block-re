@@ -51,7 +51,7 @@ function blockRE(...args) {
       out += literal.replace(/(\\\\|\\\/|\\\s)|\s+(?:\/\/.*)?/g, '$1');
 
       let cooked = cookedValues[i];
-      if (cooked) {
+      if (cooked || cooked === 0) {
         if (cooked.source) {
           // if the cooked substitution is a regex, then include its source
           cooked = cooked.source;

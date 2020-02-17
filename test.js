@@ -57,8 +57,10 @@ test(`blockRE doesn't require escaping special chars`, (assert) => {
 test(`blockRE does substitutions`, (assert) => {
   const re = RE();
   const A = /a/;
+  const zero = 0;
   assert.equal(re`${A}${'b'}c`.source, `abc`);
-  assert.ok(re`\s*${A}${'bc'}`.test('abc'));
+  assert.ok(re`\s*${A}${'b'}c`.test('abc'));
+  assert.equal(re`${A}${zero}c`.source, `a0c`);
   assert.end();
 });
 
