@@ -1,2 +1,2 @@
-declare function blockRE(literals: TemplateStringsArray, ...cookedValues: unknown[]): RegExp;
-declare function isRegex(obj: unknown): obj is RegExp;
+declare const _default: (literals: TemplateStringsArray, ...cookedValues: unknown[]) => RegExp;
+export = _default;

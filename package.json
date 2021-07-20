@@ -2,15 +2,17 @@
   "name": "@ckirby/block-re",
   "version": "2.0.0",
   "description": "block regular expression javascript template function",
-  "main": "index.js",
   "engines": {
     "node": ">=12.0.0"
   },
   "exports": {
     ".": {
-      "require": "./dist/cjs/index.js",
-      "import": "./dist/esm/index.js"
+      "require": "./dist/cjs/index-cjs.js",
+      "import": "./dist/esm/block-re.js"
     }
+  },
+  "imports": {
+    "#cjs": "./dist/cjs/index-cjs.js"
   },
   "types": "./types/index.d.ts",
   "files": [
@@ -18,7 +20,7 @@
     "types"
   ],
   "scripts": {
-    "compile": "yarn compile:cjs && yarn compile:esm",
+    "compile": "rm -rf dist/* && yarn compile:cjs && yarn compile:esm",
     "compile:cjs": "tsc -p tsconfig.json",
     "compile:esm": "tsc -p tsconfig-esm.json",
     "prepublishOnly": "yarn compile",

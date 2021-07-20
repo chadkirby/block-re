@@ -1,5 +1,5 @@
 const test = require('tape');
-const re = require('./dist/cjs/index');
+const re = require('#cjs');
 
 test(`blockRE works`, (assert) => {
   assert.ok(re`` instanceof RegExp);
