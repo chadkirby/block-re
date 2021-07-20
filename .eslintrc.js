@@ -1,19 +1,23 @@
 module.exports = {
-  root: true,
   parserOptions: {
-    ecmaVersion: 2018
+    ecmaVersion: 2020
   },
-  env: {
-    'es6': true
-  },
-  extends: [
-    'plugin:turbopatent/node'
-  ],
-  rules: {
-    "no-shadow": [
-      "error", 
-      { builtinGlobals: true, hoist: "functions", allow: [ "URL" ] }
-    ]
-  },
-  overrides: []
+  plugins: ['@typescript-eslint'],
+  ignorePatterns: ["dist"],
+  overrides: [
+    // typescript
+    {
+      files: ['**/*.ts'],
+      parser: '@typescript-eslint/parser',
+      extends: [
+        'plugin:@typescript-eslint/eslint-recommended',
+        'plugin:@typescript-eslint/recommended',
+      ],
+      rules: {
+        'prefer-const': 'off',
+        '@typescript-eslint/no-non-null-assertion': 'off',
+      },
+    }
+
+  ]
 };

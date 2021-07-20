@@ -3,16 +3,40 @@
   "version": "1.1.2",
   "description": "block regular expression javascript template function",
   "main": "index.js",
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "exports": {
+    ".": {
+      "require": "./dist/cjs/index.js",
+      "import": "./dist/esm/index.js"
+    }
+  },
+  "types": "./types/index.d.ts",
+  "files": [
+    "dist",
+    "types"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "compile": "yarn compile:cjs && yarn compile:esm",
+    "compile:cjs": "tsc -p tsconfig.json",
+    "compile:esm": "tsc -p tsconfig-esm.json",
+    "prepublishOnly": "yarn compile",
+    "watch": "yarn tsc-watch"
   },
   "author": "Chad Kirby",
   "license": "MIT",
   "devDependencies": {
-    "eslint": "^6.0.0",
-    "eslint-plugin-turbopatent": "^4.0.0",
-    "tape": "^4.11.0",
-    "tom-jumbo-grumbo": "git+ssh://git@github.com/PatentNavigation/tom-jumbo-grumbo.git#v1.0.2"
+    "@types/node": "^16.3.3",
+    "@types/tape": "^4.13.1",
+    "@typescript-eslint/eslint-plugin": "^4.28.3",
+    "@typescript-eslint/parser": "^4.28.3",
+    "eslint": "^7.31.0",
+    "tape": "^5.2.2",
+    "tom-jumbo-grumbo": "git+ssh://git@github.com/PatentNavigation/tom-jumbo-grumbo.git#v1.0.2",
+    "ts-node": "^10.1.0",
+    "tsc-watch": "^4.4.0",
+    "typescript": "^4.3.5"
   },
   "repository": {
     "type": "git",
