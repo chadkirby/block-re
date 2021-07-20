@@ -1,4 +1,4 @@
-function blockRE(literals: TemplateStringsArray, ...cookedValues: unknown[]): RegExp {
+export default function blockRE(literals: TemplateStringsArray, ...cookedValues: unknown[]): RegExp {
   let escapeText;
   let flags;
 
@@ -64,5 +64,3 @@ function blockRE(literals: TemplateStringsArray, ...cookedValues: unknown[]): Re
 function isRegex(obj: unknown): obj is RegExp {
   return (obj as RegExp)?.source !== undefined;
 }
-
-module.exports = blockRE;
