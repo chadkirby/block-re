@@ -1,8 +1,7 @@
 const test = require('tape');
-const RE = require('./index');
+const re = require('./dist/cjs/index');
 
 test(`blockRE works`, (assert) => {
-  const re = RE();
   assert.ok(re`` instanceof RegExp);
   assert.equal(re`a`.source, `a`);
   assert.ok(re`a`.test('abc'));
@@ -10,16 +9,15 @@ test(`blockRE works`, (assert) => {
 });
 
 test(`blockRE accepts flags`, (assert) => {
-  assert.equal(RE()``.flags, ``);
-  assert.equal(RE('g')``.flags, `g`);
-  assert.equal(RE('i')``.flags, `i`);
-  assert.equal(RE('m')``.flags, `m`);
-  assert.equal(RE('gim')``.flags, `gim`);
+  assert.equal(re``.flags, ``);
+  assert.equal(re`/x/g`.flags, `g`);
+  assert.equal(re`/x/i`.flags, `i`);
+  assert.equal(re`/x/m`.flags, `m`);
+  assert.equal(re`/x/gim`.flags, `gim`);
   assert.end();
 });
 
 test(`blockRE ignores whitespace`, (assert) => {
-  const re = RE();
   assert.equal(re`a b c`.source, `abc`);
   assert.ok(re`
     a
@@ -35,7 +33,6 @@ test(`blockRE ignores whitespace`, (assert) => {
 });
 
 test(`blockRE ignores comments`, (assert) => {
-  const re = RE();
   assert.equal(re`
     a // match a literal 'a'
   `.source, `a`);
@@ -48,14 +45,12 @@ test(`blockRE ignores comments`, (assert) => {
 });
 
 test(`blockRE doesn't require escaping special chars`, (assert) => {
-  const re = RE();
   assert.equal(re`\d`.source, `\\d`);
   assert.ok(re`\w{3}`.test('abc'));
   assert.end();
 });
 
 test(`blockRE does substitutions`, (assert) => {
-  const re = RE();
   const A = /a/;
   const zero = 0;
   assert.equal(re`${A}${'b'}c`.source, `abc`);
@@ -65,56 +60,48 @@ test(`blockRE does substitutions`, (assert) => {
 });
 
 test(`blockRE escapes string substitutions, not regex substitutions`, (assert) => {
-  const re = RE();
   const A = /[aA]/; // inserted as regex
   const B = `[bB]`; // inserted as escaped string
-  assert.equal(re`${A}${B}`.source, `[aA]\\[bB\\]`);
+  assert.equal(re`/${A}${B}/E`.source, `[aA]\\[bB\\]`);
+  assert.equal(re`/${A}${B}/`.source, `[aA][bB]`);
 
   const C = /[\w\W]/;
   assert.equal(
-    re`${C}${C.source}`.source,
+    re`/${C}${C.source}/E`.source,
     `[\\w\\W]\\[\\\\w\\\\W\\]`
   );
 
-  assert.equal(
-    RE('', { escapeText: false })`${C}${C.source}`.source,
-    `[\\w\\W][\\w\\W]`
-  );
-  assert.equal(
-    RE({ escapeText: false })`${C}${C.source}`.source,
-    `[\\w\\W][\\w\\W]`
-  );
   assert.end();
 });
 
 test(`BLOCKRE accepts regex literal syntax`, (assert) => {
-  assert.equal(RE`/x/g`.source, `x`);
-  assert.equal(RE`x`.source, `x`);
-  assert.equal(RE`/
+  assert.equal(re`/x/g`.source, `x`);
+  assert.equal(re`x`.source, `x`);
+  assert.equal(re`/
     y // match 'y'
   /g`.source, `y`);
-  assert.equal(RE`/x/g`.flags, `g`);
-  assert.equal(RE`x`.flags, ``);
-  assert.equal(RE`/x/suygim`.flags, `gimsuy`);
-  assert.equal(RE`/ a ${'b'} ${/c/} /`.source, `abc`);
-  assert.equal(RE`/ ${/[a]/} /`.source, `[a]`);
+  assert.equal(re`/x/g`.flags, `g`);
+  assert.equal(re`x`.flags, ``);
+  assert.equal(re`/x/suygim`.flags, `gimsuy`);
+  assert.equal(re`/ a ${'b'} ${/c/} /`.source, `abc`);
+  assert.equal(re`/ ${/[a]/} /`.source, `[a]`);
   assert.equal(
-    RE`/ ${/[a]\d{1}/.source} /`.source,
+    re`/ ${/[a]\d{1}/.source} /`.source,
     `[a]\\d{1}`,
     `don't escape text by default`
   );
   assert.equal(
-    RE`/ ${/[a]\d{1}/.source} /E`.source,
+    re`/ ${/[a]\d{1}/.source} /E`.source,
     `\\[a\\]\\\\d\\{1\\}`,
     `'E' flag opts in to escape text in substitutions`
   );
 
   assert.deepEqual(
-    RE`/
+    Object.assign({}, re`/
       (?<${'first'}> . )
       (${'?<second>'} . )
       ${'(?<third>.)'}
-    /`.exec('abc').groups,
+    /`.exec('abc').groups),
     { first: `a`, second: `b`, third: `c` },
     `named capture groups FTW`
   );

@@ -1,18 +1,16 @@
-function blockRE(...args) {
+function blockRE(literals: TemplateStringsArray, ...cookedValues: unknown[]): RegExp {
   let escapeText;
   let flags;
-  let options;
 
-  // check whether this function is being used directly as a tag function
-  if (args[0] && Array.isArray(args[0]) && args[0].raw) {
     escapeText = false;
-    // in this mode, the raw literals may have literal RegExp slashes & trailing
-    // flags
-    let [ literals, ...cookedValues ] = args;
+    // the raw literals may have literal RegExp slashes &
+    // trailing flags
     // make an unfrozen copy of the raw literals
     let raw = literals.raw.slice();
     let last = raw[raw.length - 1];
-    // check for trailing slash & supported flags (including our special 'E' flag)
+
+    // check for trailing slash & supported flags (including
+    // our special 'E' flag)
     let trailing = last.match(/[/][gimsuyE]*$/);
     if (raw[0].startsWith('/') && trailing) {
       // the tagged string has literal RegExp syntax
@@ -28,36 +26,27 @@ function blockRE(...args) {
       raw[0] = raw[0].slice(1);
     }
     return tagFn({ raw }, ...cookedValues);
-  }
 
-  // else return a tagged template function with the backwards-compatible
-  // flags & options
-  [ flags = '', options ] = args;
-  if (typeof(flags) === 'object' && options === undefined) {
-    options = flags;
-    flags = '';
-  }
-  ({ escapeText = true } = options || {});
 
-  return tagFn;
-
-  function tagFn({ raw: literals }, ...cookedValues) {
+  function tagFn({ raw: literals }, ...cookedValues: unknown[]): RegExp {
     let out = ``;
     for (const i of literals.keys()) {
       let literal = literals[i];
-      // replace white-space and comments in the raw string, allowing escaped '/'
-      // and whitespace but also match the escaped escape /\\\\/, so it doesn't
-      // act like an escape!
+      // replace white-space and comments in the raw string,
+      // allowing escaped '/' and whitespace but also match
+      // the escaped escape /\\\\/, so it doesn't act like
+      // an escape!
       out += literal.replace(/(\\\\|\\\/|\\\s)|\s+(?:\/\/.*)?/g, '$1');
 
       let cooked = cookedValues[i];
       if (cooked || cooked === 0) {
-        if (cooked.source) {
+        if (isRegex(cooked)) {
           // if the cooked substitution is a regex, then include its source
           cooked = cooked.source;
         } else if (escapeText) {
-          // escape the substitution as a string when the substitution is not a
-          // regex, and we are escaping text
+          // escape the substitution as a string when the
+          // substitution is not a regex, and we are
+          // escaping text
           cooked = String(cooked).replace(
             /[-[\]/{}()*+?.\\^$|]/g,
             "\\$&"
@@ -70,6 +59,10 @@ function blockRE(...args) {
     return new RegExp(out, flags);
   }
 
+}
+
+function isRegex(obj: unknown): obj is RegExp {
+  return (obj as RegExp)?.source !== undefined;
 }
 
 module.exports = blockRE;
