@@ -1,5 +1,7 @@
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
 const test = require('tape');
-const re = require('#cjs');
+import re from './dist/block-re.js';
 
 test(`blockRE works`, (assert) => {
   assert.ok(re`` instanceof RegExp);
