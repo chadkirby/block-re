@@ -3,7 +3,6 @@
   "include": ["src/**/*"],
   "compilerOptions": {
     "module": "ES2020",
-    "declarationDir": "./types",
     "outDir": "dist",
     "rootDir": "src",
     "target": "es2019",
