@@ -3,7 +3,7 @@
   "version": "3.0.0",
   "description": "block regular expression javascript template function",
   "engines": {
-    "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
+    "node": ">=12.20.0"
   },
   "type": "module",
   "main": "./dist/block-re.js",
